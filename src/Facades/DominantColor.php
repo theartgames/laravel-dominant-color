@@ -8,6 +8,6 @@ class DominantColor extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'dominant-color';
+        return \CapsulesCodes\DominantColor\DominantColor::class;
     }
 }

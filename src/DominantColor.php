@@ -4,7 +4,7 @@ namespace CapsulesCodes\DominantColor;
 
 use KMeans\Space;
 use KMeans\Cluster;
-use Naomai\Utils\ColorConversion;
+use CapsulesCodes\DominantColor\Utils\ColorConversion;
 
 class DominantColor
 {
@@ -172,7 +172,7 @@ class DominantColor
 
         $primary = $scoreArray['clusters'][$scoreArray['primary']['idx']];
 
-        array_walk($scoreArray['clusters'], function (&$c, $idx) use (&$maxSScore, &$secondaryIdx, $scoreArray, $primary, $secConfig) {
+        array_walk($scoreArray['clusters'], function (&$c, $idx) use (&$maxSScore, &$secondaryIdx, $scoreArray, $primary) {
             if ($idx==$scoreArray['primary']['idx']) { // primary != secondary
                 $c['s_score']=0;
                 return;

@@ -2,38 +2,27 @@
 
 namespace CapsulesCodes\DominantColor;
 
-use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 use CapsulesCodes\DominantColor\DominantColor;
 
-class DominantColorServiceProvider extends ServiceProvider
+class DominantColorServiceProvider extends PackageServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function configurePackage(Package $package): void
     {
-        $this->publishes([
-            __DIR__.'/../config/dominant-color.php' => config_path('dominant-color.php'),
-        ]);
+        /*
+         * This class is a Package Service Provider
+         *
+         * More info: https://github.com/spatie/laravel-package-tools
+         */
+        $package
+            ->name('dominant-color')
+            ->hasConfigFile();
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
+    public function packageRegistered(): void
     {
-        $this->app->singleton(DominantColor::class, function () {
-            return new DominantColor();
-        });
+        $this->app->singleton(DominantColor::class);
         $this->app->alias(DominantColor::class, 'dominant-color');
-
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/dominant-color.php',
-            'dominant-color'
-        );
     }
 }
