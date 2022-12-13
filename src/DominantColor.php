@@ -14,13 +14,12 @@ class DominantColor
     public const CalcWidth = 100;
     public const CalcHeight = 100;
 
-    // util class stuff
     public function __construct()
     {
         // throw new \Exception(get_class() . " is an utility class and should be used statically");
     }
 
-    public function fromGD($gdImage, int $colorCount = 2)
+    public function fromGD($gdImage, int $colorCount = 2): array
     {
         $colorCount = max($colorCount, 2); // at least 2 colors - primary and secondary
 
@@ -54,16 +53,21 @@ class DominantColor
         return ["primary"=>$primary['color'], "secondary"=>$secondary['color'], "palette"=>$palette];
     }
 
-    public function fromFile(string $fileName, int $colorCount = 2)
+    public function fromFile(string $fileName, int $colorCount = 2): array
     {
         $gdImg = imagecreatefromstring(file_get_contents($fileName));
+
+        if (!$gdImg) {
+            throw new \Exception("Could not load image from file $fileName");
+        }
+
         $colorInfo = DominantColor::fromGD($gdImg, $colorCount);
         imagedestroy($gdImg);
 
         return $colorInfo;
     }
 
-    private function imageToKSpace($gdImage)
+    private function imageToKSpace($gdImage): Space
     {
         $wImage = imagesx($gdImage);
         $hImage = imagesy($gdImage);
@@ -94,7 +98,7 @@ class DominantColor
         return $space;
     }
 
-    private function createScoreArray(array $clusters)
+    private function createScoreArray(array $clusters): array
     {
         $clusterScore = [];
         $maxCount = 0;
@@ -163,7 +167,6 @@ class DominantColor
 
     private function findSecondaryColor(array &$scoreArray)
     {
-        $secConfig = config('dominant-color.secondary');
         $maxSScore = 0;
         $secondaryIdx = 0;
 
@@ -201,7 +204,7 @@ class DominantColor
         return $scoreArray['clusters'][$secondaryIdx];
     }
 
-    private function normalizeColor(array $cluster, array $scoreArray)
+    private function normalizeColor(array $cluster, array $scoreArray): array
     {
         $sf = $cluster['s'] / $scoreArray['maxS'];
         $vf = $cluster['v'] / $scoreArray['maxV'];

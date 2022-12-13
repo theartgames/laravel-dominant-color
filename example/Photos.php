@@ -1,8 +1,8 @@
 <?php
 
-require_once "../vendor/autoload.php"; 
+use CapsulesCodes\DominantColor\Facades\DominantColor;
 
-use Naomai\DominantColor;
+require_once "../vendor/autoload.php";
 
 header("Content-type: text/html; charset=utf-8");
 
@@ -13,34 +13,35 @@ exampleImageSrc("CAM00018.jpg");
 
 
 
-function exampleImageSrc($src){
-	$colorInfo = DominantColor::fromFile($src,7);
+function exampleImageSrc($src)
+{
+    $colorInfo = DominantColor::fromFile($src, 7);
 
-	// --------
+    // --------
 
-	printf("<h2>File %s:</h2>\n", htmlspecialchars($src));
-	printf("<img src=\"%s\" alt=\"\" class=\"col_ex\" />\n", htmlspecialchars($src));
-	
-	printf("<div class=\"col_cont\">\n");
-	$primary = $colorInfo['primary'];
-	printf("<div style=\"background: #%06x; color: #%06x\" class=\"col_box\">Primary color</div>", $primary, 0xFFFFFF-$primary);
+    printf("<h2>File %s:</h2>\n", htmlspecialchars($src));
+    printf("<img src=\"%s\" alt=\"\" class=\"col_ex\" />\n", htmlspecialchars($src));
 
-	$secondary = $colorInfo['secondary'];
-	printf("<div style=\"background: #%06x; color: #%06x\" class=\"col_box\">Secondary color</div>", $secondary, 0xFFFFFF-$secondary);
+    printf("<div class=\"col_cont\">\n");
+    $primary = $colorInfo['primary'];
+    printf("<div style=\"background: #%06x; color: #%06x\" class=\"col_box\">Primary color</div>", $primary, 0xFFFFFF-$primary);
 
-	$palette = $colorInfo['palette'];
-	printf("<h2>Other colors:</h2>\n", $src);
-	foreach($palette as $paletteItem){
-		$color = $paletteItem['color'];
-		$score = $paletteItem['score'];
-		printf("<div style=\"background: #%06x; color: #%06x\" class=\"col_box\">Score %.02f</div>", $color, 0xFFFFFF-$color, $score);
-	}
-	printf("</div>\n");
+    $secondary = $colorInfo['secondary'];
+    printf("<div style=\"background: #%06x; color: #%06x\" class=\"col_box\">Secondary color</div>", $secondary, 0xFFFFFF-$secondary);
+
+    $palette = $colorInfo['palette'];
+    printf("<h2>Other colors:</h2>\n", $src);
+    foreach ($palette as $paletteItem) {
+        $color = $paletteItem['color'];
+        $score = $paletteItem['score'];
+        printf("<div style=\"background: #%06x; color: #%06x\" class=\"col_box\">Score %.02f</div>", $color, 0xFFFFFF-$color, $score);
+    }
+    printf("</div>\n");
 }
 
 ?>
 
-<style> 
+<style>
 	.col_cont{
 		display: inline-block;
 		vertical-align: top;
