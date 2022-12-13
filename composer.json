@@ -1,19 +1,33 @@
 {
-	"name": "naomai/php-dominantcolor",
+	"name": "capsulescodes/laravel-dominant-color",
 	"description": "Find dominant colors in an image using K-means clustering",
     "require": {
-        "php": ">=7.0",
-        "bdelespierre/php-kmeans": "@dev"
+        "php": "^8.0",
+        "illuminate/support": "^8.0|^9.0",
+        "bdelespierre/php-kmeans": "v2.2.0"
     },
-	"repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/naomai/php-dominantcolor"
+	"require-dev": {
+        "phpunit/phpunit": "^8.0||^9.0",
+        "orchestra/testbench": "^5.1"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "CapsulesCodes\\DominantColor\\": "src/"
         }
-    ],
-	"autoload": {
-        "psr-4": { 
-			"Naomai\\": "src/" 
-		}
+    },
+    "autoload-dev" : {
+        "psr-4" : {
+            "CapsulesCodes\\DominantColor\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CapsulesCodes\\DominantColor\\DominantColorServiceProvider"
+            ],
+            "aliases": {
+                "DominantColor": "CapsulesCodes\\DominantColor\\Facades\\DominantColor"
+            }
+        }
     }
 }
