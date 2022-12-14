@@ -19,7 +19,7 @@ class DominantColor
         // throw new \Exception(get_class() . " is an utility class and should be used statically");
     }
 
-    public function fromGD($gdImage, int $colorCount = 2): array
+    public function fromGD($gdImage, int $colorCount = 2): ColorPalette
     {
         $colorCount = max($colorCount, 2); // at least 2 colors - primary and secondary
 
@@ -43,17 +43,32 @@ class DominantColor
         $palette = [];
         foreach ($scores['clusters'] as &$c) {
             if ($c['color'] != $primary['color'] && $c['color'] != $secondary['color']) {
-                $palette[] = ['color'=>$c['color'],'score'=>$c['s_score'] / $scores['secondary']['maxScore']];
+                $palette[] = new Color($c);
+                // [
+                //     'color' => ColorConversion::hsv2hex($c['h'], $c['s'], $c['v']),
+                //     'score' => $c['s_score'] / $scores['secondary']['maxScore']
+                // ];
             }
         }
         usort($palette, function ($a, $b) {
-            return $b['score'] <=> $a['score'];
+            return $b->score() <=> $a->score();
         });
 
-        return ["primary"=>$primary['color'], "secondary"=>$secondary['color'], "palette"=>$palette];
+        $colorPalette = new ColorPalette(
+            primary: $primary,
+            secondary: $secondary,
+            palette: $palette
+        );
+
+        return $colorPalette;
+        // return [
+        //     'primary' => ColorConversion::hsv2hex($primary['h'], $primary['s'], $primary['v']),
+        //     'secondary' => ColorConversion::hsv2hex($secondary['h'], $secondary['s'], $secondary['v']),
+        //     'palette' => $palette
+        // ];
     }
 
-    public function fromFile(string $fileName, int $colorCount = 2): array
+    public function fromFile(string $fileName, int $colorCount = 2): ColorPalette
     {
         $gdImg = imagecreatefromstring(file_get_contents($fileName));
 
@@ -61,7 +76,7 @@ class DominantColor
             throw new \Exception("Could not load image from file $fileName");
         }
 
-        $colorInfo = DominantColor::fromGD($gdImg, $colorCount);
+        $colorInfo = $this->fromGD($gdImg, $colorCount);
         imagedestroy($gdImg);
 
         return $colorInfo;
@@ -72,8 +87,8 @@ class DominantColor
         $wImage = imagesx($gdImage);
         $hImage = imagesy($gdImage);
 
-        $xSkip = max($wImage / DominantColor::CalcWidth, 1);
-        $ySkip = max($hImage / DominantColor::CalcHeight, 1);
+        $xSkip = max($wImage / $this->CalcWidth, 1);
+        $ySkip = max($hImage / $this->CalcHeight, 1);
 
         $space = new Space(3);
 
@@ -116,9 +131,14 @@ class DominantColor
             $xRGB = $colors[1];
             $clusterCount = count($cluster);
 
-            $clusterScore[] = [ "clusterObj"=>$cluster, "color"=>$xRGB,
-                "h"=>$aHSV[0], "s"=>$aHSV[1], "v"=>$aHSV[2],
-                "count"=>$clusterCount ];
+            $clusterScore[] = [
+                "clusterObj"=>$cluster,
+                "color"=>$xRGB,
+                "h"=>$aHSV[0],
+                "s"=>$aHSV[1],
+                "v"=>$aHSV[2],
+                "count"=>$clusterCount
+            ];
 
             $maxCount = max($maxCount, $clusterCount);
             $maxS = max($maxS, $aHSV[1]);
@@ -162,7 +182,7 @@ class DominantColor
         });
         $scoreArray['primary'] = ['maxScore'=>$maxPScore, 'idx'=>$primaryIdx];
 
-        return $scoreArray['clusters'][$primaryIdx];
+        return new Color($scoreArray['clusters'][$primaryIdx]);
     }
 
     private function findSecondaryColor(array &$scoreArray)
@@ -201,7 +221,7 @@ class DominantColor
         });
         $scoreArray['secondary'] = ['maxScore'=>$maxSScore, 'idx'=>$secondaryIdx];
 
-        return $scoreArray['clusters'][$secondaryIdx];
+        return new Color($scoreArray['clusters'][$secondaryIdx]);
     }
 
     private function normalizeColor(array $cluster, array $scoreArray): array

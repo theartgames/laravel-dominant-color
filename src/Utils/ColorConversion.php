@@ -114,7 +114,13 @@ class ColorConversion
     // converts color array (structured like above) into binary RGB value
     public static function rgb2hex($rgb)
     {
-        return ($rgb[0]<<16) | ($rgb[1]<<8) | ($rgb[2]);
+        // return ($rgb[0]<<16) | ($rgb[1]<<8) | ($rgb[2]);
+        return sprintf('%02X%02X%02X', $rgb[0], $rgb[1], $rgb[2]);
+    }
+
+    public static function hsv2hex($H, $S, $V)
+    {
+        return self::rgb2hex(self::hsv2rgb($H, $S, $V));
     }
 
     // clamp
