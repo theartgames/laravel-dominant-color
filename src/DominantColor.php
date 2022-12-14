@@ -11,8 +11,8 @@ class DominantColor
     /* define how many pixels horizontally and vertically are taken into account
         100x100 is more than enough to get colors from album covers
     */
-    public const CalcWidth = 100;
-    public const CalcHeight = 100;
+    protected $calcWidth = 100;
+    protected $calcHeight = 100;
 
     public function __construct()
     {
@@ -87,8 +87,8 @@ class DominantColor
         $wImage = imagesx($gdImage);
         $hImage = imagesy($gdImage);
 
-        $xSkip = max($wImage / $this->CalcWidth, 1);
-        $ySkip = max($hImage / $this->CalcHeight, 1);
+        $xSkip = max($wImage / $this->calcWidth, 1);
+        $ySkip = max($hImage / $this->calcHeight, 1);
 
         $space = new Space(3);
 
