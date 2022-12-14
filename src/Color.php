@@ -15,6 +15,16 @@ class Color
         return $this->kmeansOutput['s_score'];
     }
 
+    /**
+     * Color in RGB concatenated to be able to compare it with other colors
+     *
+     * @return void
+     */
+    public function color(): int
+    {
+        return $this->kmeansOutput['color'];
+    }
+
     public function toRGB()
     {
         $rgb = ColorConversion::hsv2rgb($this->kmeansOutput['h'], $this->kmeansOutput['s'], $this->kmeansOutput['v']);

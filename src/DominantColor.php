@@ -42,7 +42,7 @@ class DominantColor
 
         $palette = [];
         foreach ($scores['clusters'] as &$c) {
-            if ($c['color'] != $primary['color'] && $c['color'] != $secondary['color']) {
+            if ($c['color'] != $primary->color() && $c['color'] != $secondary->color()) {
                 $palette[] = new Color($c);
                 // [
                 //     'color' => ColorConversion::hsv2hex($c['h'], $c['s'], $c['v']),
