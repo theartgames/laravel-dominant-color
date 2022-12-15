@@ -45,10 +45,11 @@ class Color
     public function toRGB(): array
     {
         $rgb = ColorConversion::hsv2rgb($this->kmeansOutput['h'], $this->kmeansOutput['s'], $this->kmeansOutput['v']);
+
         return [
             'r' => $rgb[0],
             'g' => $rgb[1],
-            'b' => $rgb[2]
+            'b' => $rgb[2],
         ];
     }
 
@@ -62,20 +63,20 @@ class Color
         return [
             'h' => $this->kmeansOutput['h'],
             's' => $this->kmeansOutput['s'],
-            'v' => $this->kmeansOutput['v']
+            'v' => $this->kmeansOutput['v'],
         ];
     }
 
     /**
      * Convert colors to Hexadecimal
      *
-     * @param boolean $withHash
+     * @param  bool  $withHash
      * @return string
      */
     public function toHexadecimal(bool $withHash = true): string
     {
         $hexadecimal = ColorConversion::hsv2hex($this->kmeansOutput['h'], $this->kmeansOutput['s'], $this->kmeansOutput['v']);
 
-        return $withHash ? '#' . $hexadecimal : $hexadecimal;
+        return $withHash ? '#'.$hexadecimal : $hexadecimal;
     }
 }

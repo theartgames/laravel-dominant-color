@@ -3,7 +3,7 @@
 use CapsulesCodes\DominantColor\Facades\DominantColor;
 
 it('can get primary color from picture', function () {
-    $colorPalette = DominantColor::fromFile(__DIR__ . '/pictures/primary-secondary-palette.jpg');
+    $colorPalette = DominantColor::fromFile(__DIR__.'/pictures/primary-secondary-palette.jpg');
 
     $primaryHexadecimal = $colorPalette
         ->primary()
@@ -16,7 +16,7 @@ it('can get primary color from picture', function () {
 });
 
 it('can get secondary color from picture', function () {
-    $colorPalette = DominantColor::fromFile(__DIR__ . '/pictures/primary-secondary-palette.jpg');
+    $colorPalette = DominantColor::fromFile(__DIR__.'/pictures/primary-secondary-palette.jpg');
 
     $secondaryHexadecimal = $colorPalette
         ->secondary()
@@ -29,14 +29,14 @@ it('can get secondary color from picture', function () {
 });
 
 it('can get palette from picture', function () {
-    $colorPalette = DominantColor::fromFile(__DIR__ . '/pictures/primary-secondary-palette.jpg', 5);
+    $colorPalette = DominantColor::fromFile(__DIR__.'/pictures/primary-secondary-palette.jpg', 5);
 
     $lastColors = $colorPalette->hexadecimalPalette();
 
     $colors = [];
     foreach ($colorPalette->palette() as $color) {
         $score = $color->score();
-        $colors["".$score] = $color->toHexadecimal();
+        $colors[''.$score] = $color->toHexadecimal();
     }
     // ray('palette', $colors);
 
@@ -46,7 +46,7 @@ it('can get palette from picture', function () {
     expect($lastColors)->toBe([
         '#F0564A',
         '#265BA9',
-        '#00D7BF'
+        '#00D7BF',
     ]);
 
     // '#F0564A',
@@ -66,7 +66,7 @@ it('can get palette from picture', function () {
 });
 
 it('can get complete hexadecimal palette', function () {
-    $colorPalette = DominantColor::fromFile(__DIR__ . '/pictures/primary-secondary-palette.jpg', 5);
+    $colorPalette = DominantColor::fromFile(__DIR__.'/pictures/primary-secondary-palette.jpg', 5);
 
     $completePalette = $colorPalette->completeHexadecimalPalette();
 
@@ -75,7 +75,7 @@ it('can get complete hexadecimal palette', function () {
     $colors = [];
     foreach ($colorPalette->completePalette() as $color) {
         $score = $color->score();
-        $colors["".$score] = $color->toHexadecimal();
+        $colors[''.$score] = $color->toHexadecimal();
     }
     // ray('palette', $colors);
 
@@ -86,7 +86,7 @@ it('can get complete hexadecimal palette', function () {
         '#F84952',
         '#1D5FB6',
         '#B8B107',
-        '#00D7BF'
+        '#00D7BF',
     ]);
 
     // Should be
