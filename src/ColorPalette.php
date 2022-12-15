@@ -73,6 +73,13 @@ class ColorPalette
         return array_map(fn ($color) => $color->toHexadecimal(), $this->completePalette());
     }
 
+    public function completeHexadecimalPaletteWithProbability(): array
+    {
+        $hexadecimalCompletePalette = array_map(fn ($color) => $color->toHexadecimal(), $this->completePalette());;
+        $probabilityCompletePalette = array_map(fn ($color) => $color->score(), $this->completePalette());
+        return array_combine($probabilityCompletePalette, $hexadecimalCompletePalette);
+    }
+
     private function findPrimaryColor() : void
     {
         foreach ($this->scores['clusters'] as &$cluster) {
