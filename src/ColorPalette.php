@@ -82,7 +82,7 @@ class ColorPalette
         return array_combine($probabilityCompletePalette, $hexadecimalCompletePalette);
     }
 
-    private function findPrimaryColor() : void
+    private function findPrimaryColor(): void
     {
         foreach ($this->scores['clusters'] as &$cluster) {
             [$sf, $vf, $cf] = $this->normalizeColor($cluster);
