@@ -2,7 +2,6 @@
 
 namespace CapsulesCodes\DominantColor;
 
-use CapsulesCodes\DominantColor\Color;
 use CapsulesCodes\DominantColor\Utils\ColorConversion;
 
 class ColorPalette
@@ -86,6 +85,7 @@ class ColorPalette
     {
         $hexadecimalCompletePalette = array_map(fn ($color) => $color->toHexadecimal(), $this->completePalette());
         $probabilityCompletePalette = array_map(fn ($color) => $color->count(), $this->completePalette());
+
         return array_combine($probabilityCompletePalette, $hexadecimalCompletePalette);
     }
 
@@ -125,7 +125,7 @@ class ColorPalette
         );
         $this->scores['primary'] = [
             'maxScore' => $maxPrimaryScore,
-            'idx' => $primaryIndex
+            'idx' => $primaryIndex,
         ];
 
         $this->primaryIndex = $primaryIndex;
@@ -173,7 +173,7 @@ class ColorPalette
 
         $this->scores['secondary'] = [
             'maxScore' => $maxSecondaryScore,
-            'idx' => $secondaryIndex
+            'idx' => $secondaryIndex,
         ];
         $this->secondaryIndex = $secondaryIndex;
     }
