@@ -2,9 +2,9 @@
 
 namespace CapsulesCodes\DominantColor;
 
-use KMeans\Space;
-use KMeans\Cluster;
 use CapsulesCodes\DominantColor\Utils\ColorConversion;
+use KMeans\Cluster;
+use KMeans\Space;
 
 class DominantColor
 {
@@ -36,7 +36,7 @@ class DominantColor
     {
         $gdImg = imagecreatefromstring(file_get_contents($fileName));
 
-        if (!$gdImg) {
+        if (! $gdImg) {
             throw new \Exception("Could not load image from file $fileName");
         }
 
@@ -57,8 +57,8 @@ class DominantColor
         $space = new Space(3);
 
         // walk through the pixels
-        for ($y=0; $y<$imageHeight; $y+=$ySkip) {
-            for ($x=0; $x<$imageWidth; $x+=$xSkip) {
+        for ($y = 0; $y < $imageHeight; $y += $ySkip) {
+            for ($x = 0; $x < $imageWidth; $x += $xSkip) {
                 $xRGB = imagecolorat($gdImage, floor($x), floor($y));
                 $aRGB = ColorConversion::hex2rgb($xRGB);
                 $aHSV = ColorConversion::rgb2hsv($aRGB[0], $aRGB[1], $aRGB[2]);
@@ -85,7 +85,7 @@ class DominantColor
         $maxV = 0;
 
         foreach ($clusters as $i => $cluster) {
-            if (!count($cluster)) {
+            if (! count($cluster)) {
                 continue;
             }
             $closest = $cluster->getClosest($cluster);
@@ -96,12 +96,12 @@ class DominantColor
             $clusterCount = count($cluster);
 
             $clusterScore[] = [
-                "clusterObj"=>$cluster,
-                "color"=>$xRGB,
-                "h"=>$aHSV[0],
-                "s"=>$aHSV[1],
-                "v"=>$aHSV[2],
-                "count"=>$clusterCount
+                'clusterObj' => $cluster,
+                'color' => $xRGB,
+                'h' => $aHSV[0],
+                's' => $aHSV[1],
+                'v' => $aHSV[2],
+                'count' => $clusterCount,
             ];
 
             $maxCount = max($maxCount, $clusterCount);
@@ -109,22 +109,18 @@ class DominantColor
             $maxV = max($maxV, $aHSV[2]);
         }
 
-        if (!$maxS) {
+        if (! $maxS) {
             $maxS = 1;
         }
-        if (!$maxV) {
+        if (! $maxV) {
             $maxV = 1;
         }
+
         return [
-            'clusters'=>$clusterScore,
-            'maxCount'=>$maxCount,
-            'maxS'=>$maxS,
-            'maxV'=>$maxV
+            'clusters' => $clusterScore,
+            'maxCount' => $maxCount,
+            'maxS' => $maxS,
+            'maxV' => $maxV,
         ];
     }
-
-
-
-
-
 }

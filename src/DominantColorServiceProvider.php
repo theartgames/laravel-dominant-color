@@ -4,7 +4,6 @@ namespace CapsulesCodes\DominantColor;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use CapsulesCodes\DominantColor\DominantColor;
 
 class DominantColorServiceProvider extends PackageServiceProvider
 {

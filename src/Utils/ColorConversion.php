@@ -17,7 +17,7 @@ class ColorConversion
     // HSV Results:Number 0-1
     public static function rgb2hsv($R, $G, $B): array
     {
-        $HSL = array();
+        $HSL = [];
         $var_R = ColorConversion::clamp($R / 255, 0, 1);
         $var_G = ColorConversion::clamp($G / 255, 0, 1);
         $var_B = ColorConversion::clamp($B / 255, 0, 1);
@@ -40,10 +40,10 @@ class ColorConversion
             } elseif ($var_B == $var_Max) {
                 $H = (2 / 3) + $del_G - $del_R;
             }
-            if ($H<0) {
+            if ($H < 0) {
                 $H++;
             }
-            if ($H>1) {
+            if ($H > 1) {
                 $H--;
             }
         }
@@ -56,10 +56,10 @@ class ColorConversion
     // RGB Results:Number 0-255
     public static function hsv2rgb($H, $S, $V): array
     {
-        $RGB = array();
-        $H=ColorConversion::clampCyclic($H, 0, 1);
-        $S=ColorConversion::clamp($S, 0, 1);
-        $V=ColorConversion::clamp($V, 0, 1);
+        $RGB = [];
+        $H = ColorConversion::clampCyclic($H, 0, 1);
+        $S = ColorConversion::clamp($S, 0, 1);
+        $V = ColorConversion::clamp($V, 0, 1);
 
         if ($S == 0) {
             $R = $G = $B = $V * 255;
@@ -70,29 +70,29 @@ class ColorConversion
             $var_2 = $V * (1 - $S * ($var_H - $var_i));
             $var_3 = $V * (1 - $S * (1 - ($var_H - $var_i)));
             if ($var_i == 0) {
-                $var_R = $V     ;
-                $var_G = $var_3  ;
-                $var_B = $var_1 ;
+                $var_R = $V;
+                $var_G = $var_3;
+                $var_B = $var_1;
             } elseif ($var_i == 1) {
-                $var_R = $var_2 ;
-                $var_G = $V      ;
-                $var_B = $var_1 ;
+                $var_R = $var_2;
+                $var_G = $V;
+                $var_B = $var_1;
             } elseif ($var_i == 2) {
-                $var_R = $var_1 ;
-                $var_G = $V      ;
-                $var_B = $var_3 ;
+                $var_R = $var_1;
+                $var_G = $V;
+                $var_B = $var_3;
             } elseif ($var_i == 3) {
-                $var_R = $var_1 ;
-                $var_G = $var_2  ;
-                $var_B = $V     ;
+                $var_R = $var_1;
+                $var_G = $var_2;
+                $var_B = $V;
             } elseif ($var_i == 4) {
-                $var_R = $var_3 ;
-                $var_G = $var_1  ;
-                $var_B = $V     ;
+                $var_R = $var_3;
+                $var_G = $var_1;
+                $var_B = $V;
             } else {
-                $var_R = $V     ;
-                $var_G = $var_1  ;
-                $var_B = $var_2 ;
+                $var_R = $V;
+                $var_G = $var_1;
+                $var_B = $var_2;
             }
             $R = $var_R * 255;
             $G = $var_G * 255;
@@ -107,7 +107,7 @@ class ColorConversion
     // converts binary RGB value to array with indices [0=>r, 1=>g, 2=>b]
     public static function hex2rgb($hex): array
     {
-        return [($hex>>16)&0xFF, ($hex>>8)&0xFF, $hex&0xFF];
+        return [($hex >> 16) & 0xFF, ($hex >> 8) & 0xFF, $hex & 0xFF];
     }
 
     // rgb2hex
@@ -141,12 +141,13 @@ class ColorConversion
             $remainder += $totalRange;
         }
         $remainder += $min;
+
         return $remainder;
     }
 
     // util class stuff
     public function __construct()
     {
-        throw new \Exception(get_class() . " is an utility class and should be used statically");
+        throw new \Exception(get_class().' is an utility class and should be used statically');
     }
 }
