@@ -61,7 +61,7 @@ class Color
      *
      * @return float
      */
-    public function secondaryScore() : float
+    public function secondaryScore(): float
     {
         return $this->kmeansOutput['s_score'];
     }
