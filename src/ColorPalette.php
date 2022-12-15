@@ -2,6 +2,7 @@
 
 namespace CapsulesCodes\DominantColor;
 
+use CapsulesCodes\DominantColor\Color;
 use CapsulesCodes\DominantColor\Utils\ColorConversion;
 
 class ColorPalette
@@ -76,8 +77,8 @@ class ColorPalette
 
     public function completeHexadecimalPaletteWithProbability(): array
     {
-        $hexadecimalCompletePalette = array_map(fn ($color) => $color->toHexadecimal(), $this->completePalette());;
-        $probabilityCompletePalette = array_map(fn ($color) => $color->score(), $this->completePalette());
+        $hexadecimalCompletePalette = array_map(fn ($color) => $color->toHexadecimal(), $this->completePalette());
+        $probabilityCompletePalette = array_map(fn ($color) => $color->count(), $this->completePalette());
         return array_combine($probabilityCompletePalette, $hexadecimalCompletePalette);
     }
 
@@ -98,28 +99,40 @@ class ColorPalette
             }
         }
 
-        $maxPScore = 0;
-        $primaryIdx = 0;
+        $maxPrimaryScore = 0;
+        $maxCountScore = 0;
+        $primaryIndex = 0;
 
-        array_walk($this->scores['clusters'], function ($cluster, $index) use (&$maxPScore, &$primaryIdx) {
-            if ($cluster['p_score'] > $maxPScore) {
-                $maxPScore = $cluster['p_score'];
-                $primaryIdx = $index;
+        array_walk(
+            $this->scores['clusters'],
+            function ($cluster, $index) use (&$maxPrimaryScore, &$maxCountScore, &$primaryIndex) {
+                if ($cluster['p_score'] > $maxPrimaryScore) {
+                    $maxPrimaryScore = $cluster['p_score'];
+                    $primaryIndex = $index;
+                }
+                if ($cluster['count'] > $maxCountScore) {
+                    $maxCountScore = $cluster['count'];
+                    $primaryIndex = $index;
+                }
             }
-        });
-        $this->scores['primary'] = ['maxScore' => $maxPScore, 'idx' => $primaryIdx];
+        );
+        $this->scores['primary'] = [
+            'maxScore' => $maxPrimaryScore,
+            'idx' => $primaryIndex
+        ];
 
-        $this->primaryIndex = $primaryIdx;
+        $this->primaryIndex = $primaryIndex;
     }
 
     private function findSecondaryColor(): void
     {
-        $maxSScore = 0;
-        $secondaryIdx = 0;
+        $maxSecondaryScore = 0;
+        $maxCountScore = 0;
+        $secondaryIndex = 0;
 
         $primary = $this->scores['clusters'][$this->scores['primary']['idx']];
 
-        array_walk($this->scores['clusters'], function (&$cluster, $index) use (&$maxSScore, &$secondaryIdx, $primary) {
+        array_walk($this->scores['clusters'], function (&$cluster, $index) use (&$maxSecondaryScore, &$maxCountScore, &$secondaryIndex, $primary) {
             if ($index == $this->scores['primary']['idx']) { // primary != secondary
                 $cluster['s_score'] = 0;
 
@@ -141,14 +154,21 @@ class ColorPalette
                 $cluster['s_score'] *= config('dominant-color.valueLowMultiplier');
             }
 
-            if ($cluster['s_score'] > $maxSScore) {
-                $maxSScore = $cluster['s_score'];
-                $secondaryIdx = $index;
+            if ($cluster['s_score'] > $maxSecondaryScore) {
+                $maxSecondaryScore = $cluster['s_score'];
+                $secondaryIndex = $index;
+            }
+            if ($cluster['count'] > $maxCountScore) {
+                $maxCountScore = $cluster['count'];
+                $secondaryIndex = $index;
             }
         });
 
-        $this->scores['secondary'] = ['maxScore' => $maxSScore, 'idx' => $secondaryIdx];
-        $this->secondaryIndex = $secondaryIdx;
+        $this->scores['secondary'] = [
+            'maxScore' => $maxSecondaryScore,
+            'idx' => $secondaryIndex
+        ];
+        $this->secondaryIndex = $secondaryIndex;
     }
 
     private function findPalette(): void
@@ -160,7 +180,8 @@ class ColorPalette
             }
         }
         usort($palette, function ($a, $b) {
-            return $b->score() <=> $a->score();
+            // return $b->score() <=> $a->score();
+            return $b->count() <=> $a->count();
         });
 
         $this->palette = $palette;

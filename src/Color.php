@@ -13,18 +13,27 @@ class Color
     }
 
     /**
-     * Return Score
+     * Return Score to be able to compare colors to create the palette
      *
      * @return float
      */
     public function score(): float
     {
         if ($this->secondaryMaxScore == 0.0) {
-            return $this->kmeansOutput['s_score'];
             throw new \Exception('Secondary max score is not set');
         }
 
         return $this->kmeansOutput['s_score'] / $this->secondaryMaxScore;
+    }
+
+    /**
+     * Gives the count of pixels of that color in the image
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return $this->kmeansOutput['count'];
     }
 
     /**
@@ -35,6 +44,26 @@ class Color
     public function color(): int
     {
         return $this->kmeansOutput['color'];
+    }
+
+    /**
+     * Primary score to find the primary color
+     *
+     * @return float
+     */
+    public function primaryScore(): float
+    {
+        return $this->kmeansOutput['p_score'];
+    }
+
+    /**
+     * Secondary score to find the secondary color
+     *
+     * @return float
+     */
+    public function secondaryScore() : float
+    {
+        return $this->kmeansOutput['s_score'];
     }
 
     /**
