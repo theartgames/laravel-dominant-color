@@ -8,8 +8,9 @@ use CapsulesCodes\DominantColor\Utils\ColorConversion;
 class ColorPalette
 {
     protected int $primaryIndex;
-
     protected int $secondaryIndex;
+    protected array $paletteIndexes;
+
 
     protected array $palette;
 
@@ -48,7 +49,13 @@ class ColorPalette
      */
     public function palette(): array
     {
-        return $this->palette;
+        $palette = [];
+
+        foreach ($this->paletteIndexes as $index) {
+            $palette[] = new Color($this->scores['clusters'][$index], secondaryMaxScore: $this->scores['secondary']['maxScore']);
+        }
+
+        return $palette;
     }
 
     public function hexadecimalPalette(): array
@@ -174,9 +181,9 @@ class ColorPalette
     private function findPalette(): void
     {
         $palette = [];
-        foreach ($this->scores['clusters'] as &$cluster) {
+        foreach ($this->scores['clusters'] as $index => &$cluster) {
             if ($cluster['color'] != $this->primary()->color() && $cluster['color'] != $this->secondary()->color()) {
-                $palette[] = new Color($cluster, secondaryMaxScore: $this->scores['secondary']['maxScore']);
+                $palette[$index] = new Color($cluster, secondaryMaxScore: $this->scores['secondary']['maxScore']);
             }
         }
         usort($palette, function ($a, $b) {
@@ -184,6 +191,7 @@ class ColorPalette
             return $b->count() <=> $a->count();
         });
 
+        $this->paletteIndexes = array_keys($palette);
         $this->palette = $palette;
     }
 
