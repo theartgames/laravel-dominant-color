@@ -6,13 +6,25 @@ use CapsulesCodes\DominantColor\Utils\ColorConversion;
 
 class Color
 {
-    public function __construct(protected array $kmeansOutput)
-    {
+    public function __construct(
+        protected array $kmeansOutput,
+        protected float $secondaryMaxScore = 0.0
+    ) {
     }
 
+    /**
+     * Return Score
+     *
+     * @return float
+     */
     public function score(): float
     {
-        return $this->kmeansOutput['s_score'];
+        if ($this->secondaryMaxScore == 0.0) {
+            return $this->kmeansOutput['s_score'];
+            throw new \Exception('Secondary max score is not set');
+        }
+
+        return $this->kmeansOutput['s_score'] / $this->secondaryMaxScore;
     }
 
     /**
@@ -25,7 +37,12 @@ class Color
         return $this->kmeansOutput['color'];
     }
 
-    public function toRGB()
+    /**
+     * Convert colors to RGB
+     *
+     * @return array
+     */
+    public function toRGB(): array
     {
         $rgb = ColorConversion::hsv2rgb($this->kmeansOutput['h'], $this->kmeansOutput['s'], $this->kmeansOutput['v']);
         return [
@@ -35,13 +52,11 @@ class Color
         ];
     }
 
-    public function toHexadecimal(bool $withHash = true)
-    {
-        $hexadecimal = ColorConversion::hsv2hex($this->kmeansOutput['h'], $this->kmeansOutput['s'], $this->kmeansOutput['v']);
-
-        return $withHash ? '#' . $hexadecimal : $hexadecimal;
-    }
-
+    /**
+     * Convert colors to HSV
+     *
+     * @return array
+     */
     public function toHSV(): array
     {
         return [
@@ -49,5 +64,18 @@ class Color
             's' => $this->kmeansOutput['s'],
             'v' => $this->kmeansOutput['v']
         ];
+    }
+
+    /**
+     * Convert colors to Hexadecimal
+     *
+     * @param boolean $withHash
+     * @return string
+     */
+    public function toHexadecimal(bool $withHash = true): string
+    {
+        $hexadecimal = ColorConversion::hsv2hex($this->kmeansOutput['h'], $this->kmeansOutput['s'], $this->kmeansOutput['v']);
+
+        return $withHash ? '#' . $hexadecimal : $hexadecimal;
     }
 }
