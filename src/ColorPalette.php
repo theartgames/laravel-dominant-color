@@ -7,9 +7,10 @@ use CapsulesCodes\DominantColor\Utils\ColorConversion;
 class ColorPalette
 {
     protected int $primaryIndex;
-    protected int $secondaryIndex;
-    protected array $paletteIndexes;
 
+    protected int $secondaryIndex;
+
+    protected array $paletteIndexes;
 
     protected array $palette;
 
