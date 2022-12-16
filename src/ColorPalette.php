@@ -114,7 +114,7 @@ class ColorPalette
         array_walk(
             $this->scores['clusters'],
             function ($cluster, $index) use (&$maxPrimaryScore, &$primaryIndex) {
-            // function ($cluster, $index) use (&$maxPrimaryScore, &$maxCountScore, &$primaryIndex) {
+                // function ($cluster, $index) use (&$maxPrimaryScore, &$maxCountScore, &$primaryIndex) {
                 if ($cluster['p_score'] > $maxPrimaryScore) {
                     $maxPrimaryScore = $cluster['p_score'];
                     $primaryIndex = $index;
