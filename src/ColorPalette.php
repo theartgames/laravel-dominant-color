@@ -108,20 +108,21 @@ class ColorPalette
         }
 
         $maxPrimaryScore = 0;
-        $maxCountScore = 0;
+        // $maxCountScore = 0;
         $primaryIndex = 0;
 
         array_walk(
             $this->scores['clusters'],
-            function ($cluster, $index) use (&$maxPrimaryScore, &$maxCountScore, &$primaryIndex) {
+            function ($cluster, $index) use (&$maxPrimaryScore, &$primaryIndex) {
+            // function ($cluster, $index) use (&$maxPrimaryScore, &$maxCountScore, &$primaryIndex) {
                 if ($cluster['p_score'] > $maxPrimaryScore) {
                     $maxPrimaryScore = $cluster['p_score'];
                     $primaryIndex = $index;
                 }
-                if ($cluster['count'] > $maxCountScore) {
-                    $maxCountScore = $cluster['count'];
-                    $primaryIndex = $index;
-                }
+                // if ($cluster['count'] > $maxCountScore) {
+                //     $maxCountScore = $cluster['count'];
+                //     $primaryIndex = $index;
+                // }
             }
         );
         $this->scores['primary'] = [
@@ -135,12 +136,13 @@ class ColorPalette
     private function findSecondaryColor(): void
     {
         $maxSecondaryScore = 0;
-        $maxCountScore = 0;
+        // $maxCountScore = 0;
         $secondaryIndex = 0;
 
         $primary = $this->scores['clusters'][$this->scores['primary']['idx']];
 
-        array_walk($this->scores['clusters'], function (&$cluster, $index) use (&$maxSecondaryScore, &$maxCountScore, &$secondaryIndex, $primary) {
+        // array_walk($this->scores['clusters'], function (&$cluster, $index) use (&$maxSecondaryScore, &$maxCountScore, &$secondaryIndex, $primary) {
+        array_walk($this->scores['clusters'], function (&$cluster, $index) use (&$maxSecondaryScore, &$secondaryIndex, $primary) {
             if ($index == $this->scores['primary']['idx']) { // primary != secondary
                 $cluster['s_score'] = 0;
 
@@ -166,10 +168,10 @@ class ColorPalette
                 $maxSecondaryScore = $cluster['s_score'];
                 $secondaryIndex = $index;
             }
-            if ($cluster['count'] > $maxCountScore) {
-                $maxCountScore = $cluster['count'];
-                $secondaryIndex = $index;
-            }
+            // if ($cluster['count'] > $maxCountScore) {
+            //     $maxCountScore = $cluster['count'];
+            //     $secondaryIndex = $index;
+            // }
         });
 
         $this->scores['secondary'] = [
